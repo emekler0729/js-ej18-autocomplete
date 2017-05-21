@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <h1>Autocomplete Example</h1>
+    <input type="text" id="field" autofocus>
+    <div id="suggestions" style="cursor: pointer"></div>
+
+    <script>
+        var terms = [];
+        for (var name in window) {
+            terms.push(name);
+        }
+
+        var field = document.querySelector('#field');
+        var suggestions = document.querySelector('#suggestions');
+
+        function makeSuggestions() {
+            suggestions.innerHTML = "";
+
+            if(field.value == "") {
+                return;
+            }
+
+            var search = new RegExp('^' + field.value);
+            var matches = terms.filter(function(term) {
+                return search.test(term);
+            });
+
+            matches.forEach(function(match) {
+                if(match != field.value) {
+                    suggestions.innerHTML += '<p>' + match + '</p>';
+                }
+            })
+        }
+
+        field.addEventListener("input", makeSuggestions);
+
+        suggestions.addEventListener("click", function(e) {
+            field.value = e.srcElement.textContent;
+            makeSuggestions();
+        })
+    </script>
+</body>
+</html>
